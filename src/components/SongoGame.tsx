@@ -65,7 +65,8 @@ const SongoGame: React.FC = () => {
         clearTimeout(delayTimerId);
       }
     };
-  }, [gameState, gameMode, isAiThinking]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState.currentPlayer, gameMode, gameState.gameOver]);
 
   const handleHolePress = useCallback((index: number) => {
     // Prevent moves during AI's turn or when AI is computing
