@@ -3,9 +3,13 @@ import re
 import shutil
 import json
 
-songs_src_dir = "/home/ravel/Documents/CODES/songo/songs"
-songs_dest_dir = "/home/ravel/Documents/CODES/songo/android/app/src/main/res/raw"
-json_dest_path = "/home/ravel/Documents/CODES/songo/src/assets/songsList.json"
+# Calculate dynamic paths relative to the project root
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(script_dir)
+
+songs_src_dir = os.path.join(project_root, "songs")
+songs_dest_dir = os.path.join(project_root, "android", "app", "src", "main", "res", "raw")
+json_dest_path = os.path.join(project_root, "src", "assets", "songsList.json")
 
 # 1. Ensure source and destination directories exist
 os.makedirs(songs_src_dir, exist_ok=True)

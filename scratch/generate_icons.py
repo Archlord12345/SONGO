@@ -1,9 +1,19 @@
 import os
 from PIL import Image, ImageDraw
 
-logo_path = "/home/ravel/.gemini/antigravity/brain/fdfbafd8-f896-45ad-8c91-718e605d9955/songo_logo_1779105972480.png"
-assets_dir = "/home/ravel/Documents/CODES/songo/src/assets"
-res_dir = "/home/ravel/Documents/CODES/songo/android/app/src/main/res"
+# Calculate dynamic paths relative to the project root
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(script_dir)
+
+# Use the developer high-res local logo if present, fallback to the checked-in logo on CI builds
+local_highres_path = "/home/ravel/.gemini/antigravity/brain/fdfbafd8-f896-45ad-8c91-718e605d9955/songo_logo_1779105972480.png"
+if os.path.exists(local_highres_path):
+    logo_path = local_highres_path
+else:
+    logo_path = os.path.join(project_root, "src", "assets", "logo.png")
+
+assets_dir = os.path.join(project_root, "src", "assets")
+res_dir = os.path.join(project_root, "android", "app", "src", "main", "res")
 
 # Ensure assets dir exists
 os.makedirs(assets_dir, exist_ok=True)
