@@ -1,7 +1,7 @@
 # 🎮 Songo - Jeu Traditionnel Africain
 
 <p align="center">
-  <img src="src/assets/logo.png" alt="Songo Logo" width="180" style="border-radius: 20px;" />
+  <img src="./src/assets/logo.png" alt="Songo Logo" width="180" />
 </p>
 
 Bienvenue dans le projet **Songo**, une adaptation moderne en **React Native** du célèbre jeu de société traditionnel d'Afrique Centrale (appartenant à la famille des Mancalas). Ce projet allie une esthétique boisée et dorée premium à une jouabilité fluide et entièrement responsive, accompagnée d'un système audio personnalisé et dynamique.
@@ -14,7 +14,7 @@ L'application arbore une identité visuelle luxueuse s'inspirant des plateaux de
 
 ### 🌟 Le Logo 3D
 <p align="left">
-  <img src="src/assets/logo.png" alt="Songo Logo 3D" width="120" />
+  <img src="./src/assets/logo.png" alt="Songo Logo 3D" width="120" />
 </p>
 
 * **Fichier Source** : [logo.png](file:///home/ravel/Documents/CODES/songo/src/assets/logo.png)
