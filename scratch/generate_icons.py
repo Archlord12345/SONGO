@@ -5,23 +5,15 @@ from PIL import Image, ImageDraw
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
 
-# Use the developer high-res local logo if present, fallback to the checked-in logo on CI builds
-local_highres_path = "/home/ravel/.gemini/antigravity/brain/fdfbafd8-f896-45ad-8c91-718e605d9955/songo_logo_1779105972480.png"
-if os.path.exists(local_highres_path):
-    logo_path = local_highres_path
-else:
-    logo_path = os.path.join(project_root, "src", "assets", "logo.png")
-
+logo_path = os.path.join(project_root, "src", "assets", "logo.png")
 assets_dir = os.path.join(project_root, "src", "assets")
 res_dir = os.path.join(project_root, "android", "app", "src", "main", "res")
 
 # Ensure assets dir exists
 os.makedirs(assets_dir, exist_ok=True)
 
-# 1. Save original logo to assets for the loading screen
+# 1. Load original logo (already saved and checked into assets)
 img = Image.open(logo_path).convert("RGBA")
-img.save(os.path.join(assets_dir, "logo.png"))
-print("Saved logo.png to assets")
 
 # 2. Extract perfect circular coin from the 1024x1024 image
 # We will create a circular mask centered at (512, 512)
