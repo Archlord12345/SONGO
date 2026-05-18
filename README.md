@@ -65,7 +65,27 @@ graph TD
     B --> C[Board.tsx - Grid & Row Sizing]
     C --> D[Hole.tsx - Dynamic Circle & Seeds]
     B --> E[songoLogic.ts - Core Mancala Algorithm]
+    B --> F[songoAI.ts - Minimax Alpha-Beta AI]
 ```
+
+### 🤖 Mode Solo - Intelligence Artificielle Tactique (`songoAI.ts`)
+
+Pour offrir un défi captivant aux joueurs solos, le jeu intègre une IA redoutable qui calcule ses coups en temps réel.
+
+#### Algorithme de Recherche (Minimax & Alpha-Bêta)
+L'IA utilise l'algorithme **Minimax** associé à l'**élagage Alpha-Bêta** avec une profondeur d'exploration de **4 plies (coups) à l'avance** :
+* **Minimax** : Simule virtuellement toutes les combinaisons possibles de coups (les siens et les contre-attaques de l'utilisateur) jusqu'à anticiper 2 tours complets.
+* **Élagage Alpha-Bêta** : Élimine instantanément les branches de l'arbre d'exploration jugées sous-optimales par rapport à une option déjà trouvée, garantissant un choix de coup ultra-performant en moins de 2 millisecondes.
+
+#### Fonction d'Évaluation (Heuristique Songo)
+Chaque configuration de plateau virtuelle est évaluée selon une équation pondérée simulant les priorités d'un joueur humain expert :
+$$\text{Score} = (\Delta\text{Captures} \times 100) + (\Delta\text{Contrôle} \times 10) - (\text{Vulnérabilités} \times 15)$$
+
+1. **Le Différentiel de Graines Capturées (Poids: 100 / graine)** : L'IA maximise en priorité absolue les coups lui permettant de capturer des graines dans le camp adverse ou de déclencher des prises en cascade.
+2. **Le Contrôle de Territoire (Poids: 10 / graine active)** : L'IA comptabilise le nombre de graines actives de son côté par rapport à celui de l'adversaire. Maintenir des graines de son côté assure une plus grande autonomie tactique.
+3. **La Prévention de Vulnérabilité (Pénalité: -15 / trou vulnérable)** : Un trou contenant 1 ou 2 graines est vulnérable (car si une graine adverse y atterrit, le trou passe à 2 ou 3, validant une capture). L'IA s'efforce de défendre son propre camp en évitant d'exposer ses trous.
+
+---
 
 ### 1. Représentation du Plateau
 Le Songo se joue avec un plateau composé de 14 trous (2 rangées de 7 trous). Chaque joueur contrôle la rangée située de son côté.
