@@ -1,0 +1,58 @@
+name: Build Songo Android APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  build:
+    name: Build Android Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java Development Kit (JDK 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Python Dependencies (Pillow)
+        run: |
+          python -m pip install --upgrade pip
+          pip install Pillow
+
+      - name: Install NPM Dependencies
+        run: npm install
+
+      - name: Prepare Assets (Songs & Circular Transparent Icons)
+        run: npm run prepare-assets
+
+      - name: Grant Execute Permission to Gradle
+        run: chmod +x android/gradlew
+
+      - name: Compile Release APK
+        run: npm run build:apk
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Songo-Release-APK
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 7
