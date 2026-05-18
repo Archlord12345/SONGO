@@ -145,3 +145,52 @@ export const getBestMove = (state: GameState, depth: number = 4): number => {
   
   return bestMove !== -1 ? bestMove : legalMoves[0];
 };
+
+/**
+ * Asynchronously calculates the best move using Minimax with Alpha-Beta pruning,
+ * enforcing a maximum search timeout of 15 seconds.
+ * If the calculation takes more than 15 seconds, it falls back to a random valid move.
+ */
+export const getBestMoveWithTimeout = (
+  state: GameState, 
+  depth: number = 4, 
+  timeoutMs: number = 15000
+): Promise<{ move: number; isRandom: boolean }> => {
+  return new Promise((resolve) => {
+    // Find all legal moves
+    const aiPlayer = state.currentPlayer;
+    const startHole = aiPlayer === 0 ? 0 : HOLES_PER_PLAYER;
+    const endHole = aiPlayer === 0 ? HOLES_PER_PLAYER : TOTAL_HOLES;
+    const legalMoves: number[] = [];
+    
+    for (let i = startHole; i < endHole; i++) {
+      if (isValidMove(state, i)) {
+        legalMoves.push(i);
+      }
+    }
+    
+    if (legalMoves.length === 0) {
+      resolve({ move: -1, isRandom: false });
+      return;
+    }
+
+    // Set up the 15-second safety timeout
+    const timeoutId = setTimeout(() => {
+      const randomMove = legalMoves[Math.floor(Math.random() * legalMoves.length)];
+      resolve({ move: randomMove, isRandom: true });
+    }, timeoutMs);
+
+    // Execute minimax search
+    setTimeout(() => {
+      try {
+        const bestMove = getBestMove(state, depth);
+        clearTimeout(timeoutId);
+        resolve({ move: bestMove, isRandom: false });
+      } catch {
+        clearTimeout(timeoutId);
+        const randomMove = legalMoves[Math.floor(Math.random() * legalMoves.length)];
+        resolve({ move: randomMove, isRandom: true });
+      }
+    }, 0);
+  });
+};

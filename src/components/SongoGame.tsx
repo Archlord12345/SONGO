@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native';
 import Board from './Board';
 import { createInitialState, makeMove, isValidMove, GameState } from '../logic/songoLogic';
-import { getBestMove } from '../logic/songoAI';
+import { getBestMoveWithTimeout } from '../logic/songoAI';
 import { COLORS } from '../styles/theme';
 
 const SongoGame: React.FC = () => {
@@ -17,30 +17,54 @@ const SongoGame: React.FC = () => {
     }
 
     setIsAiThinking(true);
+    const startTime = Date.now();
+    let isCurrentEffect = true;
+    let delayTimerId: NodeJS.Timeout | null = null;
 
-    const timer = setTimeout(() => {
-      const bestMove = getBestMove(gameState);
-      if (bestMove !== -1) {
-        setGameState((prevState) => {
-          const nextState = makeMove(prevState, bestMove);
-          
-          if (nextState.gameOver && !prevState.gameOver) {
-            let message = '';
-            if (nextState.winner === 'draw') {
-              message = 'Match nul !';
-            } else {
-              message = nextState.winner === 1 ? "L'IA a gagné ! 🤖" : "Félicitations, vous avez gagné ! 🎉";
+    // Call asynchronous AI solver with a strict 15-second timeout
+    getBestMoveWithTimeout(gameState, 4, 15000).then(({ move }) => {
+      if (!isCurrentEffect) return;
+
+      if (move !== -1) {
+        // Enforce the 10-second minimum response delay
+        const elapsed = Date.now() - startTime;
+        const remainingDelay = Math.max(0, 10000 - elapsed);
+
+        delayTimerId = setTimeout(() => {
+          if (!isCurrentEffect) return;
+
+          setGameState((prevState) => {
+            const nextState = makeMove(prevState, move);
+            
+            if (nextState.gameOver && !prevState.gameOver) {
+              let message = '';
+              if (nextState.winner === 'draw') {
+                message = 'Match nul !';
+              } else {
+                message = nextState.winner === 1 ? "L'IA a gagné ! 🤖" : "Félicitations, vous avez gagné ! 🎉";
+              }
+              Alert.alert('Fin de la partie', message);
             }
-            Alert.alert('Fin de la partie', message);
-          }
-          
-          return nextState;
-        });
+            
+            return nextState;
+          });
+          setIsAiThinking(false);
+        }, remainingDelay);
+      } else {
+        setIsAiThinking(false);
       }
-      setIsAiThinking(false);
-    }, 1000); // 1-second premium thinking delay
+    }).catch(() => {
+      if (isCurrentEffect) {
+        setIsAiThinking(false);
+      }
+    });
 
-    return () => clearTimeout(timer);
+    return () => {
+      isCurrentEffect = false;
+      if (delayTimerId) {
+        clearTimeout(delayTimerId);
+      }
+    };
   }, [gameState, gameMode, isAiThinking]);
 
   const handleHolePress = useCallback((index: number) => {
@@ -162,7 +186,7 @@ const SongoGame: React.FC = () => {
           </Text>
         ) : isAiThinking ? (
           <View style={styles.thinkingContainer}>
-            <ActivityIndicator size="small" color={COLORS.primary} style={{ marginRight: 8 }} />
+            <ActivityIndicator size="small" color={COLORS.primary} style={styles.thinkingIndicator} />
             <Text style={styles.statusText}>L'IA réfléchit...</Text>
           </View>
         ) : (
@@ -234,6 +258,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  thinkingIndicator: {
+    marginRight: 8,
   },
   actionButtons: {
     flexDirection: 'row',

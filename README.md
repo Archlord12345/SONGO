@@ -1,5 +1,9 @@
 # 🎮 Songo - Jeu Traditionnel Africain
 
+<p align="center">
+  <img src="src/assets/logo.png" alt="Songo Logo" width="180" style="border-radius: 20px;" />
+</p>
+
 Bienvenue dans le projet **Songo**, une adaptation moderne en **React Native** du célèbre jeu de société traditionnel d'Afrique Centrale (appartenant à la famille des Mancalas). Ce projet allie une esthétique boisée et dorée premium à une jouabilité fluide et entièrement responsive, accompagnée d'un système audio personnalisé et dynamique.
 
 ---
@@ -9,6 +13,10 @@ Bienvenue dans le projet **Songo**, une adaptation moderne en **React Native** d
 L'application arbore une identité visuelle luxueuse s'inspirant des plateaux de Songo traditionnels taillés dans des bois précieux.
 
 ### 🌟 Le Logo 3D
+<p align="left">
+  <img src="src/assets/logo.png" alt="Songo Logo 3D" width="120" />
+</p>
+
 * **Fichier Source** : [logo.png](file:///home/ravel/Documents/CODES/songo/src/assets/logo.png)
 * **Description** : Un pion circulaire en bois d'acajou poli verni, serti d'un liseré doré brillant, abritant des cavités sculptées remplies de graines dorées étincelantes.
 * **Écran de chargement (Splash Screen)** : Au lancement de l'application, ce logo apparaît au centre d'un fond sombre luxueux (`#0F0804`) avec un effet de fondu et de zoom progressif, suivi d'une animation d'entrée pour le titre et d'un indicateur de chargement rotatif doré. Le contenu a été ajusté avec un espacement supérieur pour un rendu visuel centré et parfaitement équilibré.
@@ -84,6 +92,12 @@ $$\text{Score} = (\Delta\text{Captures} \times 100) + (\Delta\text{Contrôle} \t
 1. **Le Différentiel de Graines Capturées (Poids: 100 / graine)** : L'IA maximise en priorité absolue les coups lui permettant de capturer des graines dans le camp adverse ou de déclencher des prises en cascade.
 2. **Le Contrôle de Territoire (Poids: 10 / graine active)** : L'IA comptabilise le nombre de graines actives de son côté par rapport à celui de l'adversaire. Maintenir des graines de son côté assure une plus grande autonomie tactique.
 3. **La Prévention de Vulnérabilité (Pénalité: -15 / trou vulnérable)** : Un trou contenant 1 ou 2 graines est vulnérable (car si une graine adverse y atterrit, le trou passe à 2 ou 3, validant une capture). L'IA s'efforce de défendre son propre camp en évitant d'exposer ses trous.
+
+#### ⏱️ Contrôle de Temps et Délai de Réponse Humanoïde
+Pour rendre les parties contre l'ordinateur plus immersives, réalistes et dramatiques, l'IA est soumise à deux contraintes de temps strictes :
+* **Délai de Réponse Forcé de 10 Secondes** : Quel que soit le temps mis par l'IA pour trouver sa meilleure option (même si le calcul Minimax s'effectue en moins de 2ms), l'ordinateur patiente et "réfléchit" pendant **exactement 10 secondes** avant de jouer son coup. Cela évite un enchaînement trop rapide des coups et imite le rythme naturel d'un adversaire humain qui prend le temps de peser ses options.
+* **Sécurité Anti-Blocage et Timeout de 15 Secondes** : Si les calculs de l'algorithme prennent plus de **15 secondes** pour évaluer les combinaisons possibles, une alerte de temporisation s'active. L'algorithme interrompt immédiatement ses calculs de manière asynchrone et joue un **coup valide choisi au hasard** pour assurer la fluidité de la partie et éliminer tout risque de gel ou de ralentissement de l'interface utilisateur.
+* **Sécurité Anti-Fuite de Mémoire** : L'implémentation React utilise un système de désabonnement actif (cleanups de hooks) pour détruire et annuler proprement les minuteurs de calcul et de délai si l'utilisateur décide de redémarrer la partie ou de quitter le match pour retourner au menu principal en plein tour de l'IA.
 
 ---
 
