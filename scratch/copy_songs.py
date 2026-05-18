@@ -28,7 +28,7 @@ if os.path.exists(songs_dest_dir):
             print(f"Failed to delete {file_path}. Reason: {e}")
 
 # Supported audio formats
-AUDIO_EXTENSIONS = ('.mp3', '.wav', '.ogg', '.m4a', '.aac')
+AUDIO_EXTENSIONS = ('.mp3', '.wav', '.ogg', '.m4a', '.aac', '.webm')
 
 # Helper to sanitize filename to meet Android resource naming conventions:
 # [a-z0-9_]+ (only lowercase, digits, and underscores, must start with letter/underscore)

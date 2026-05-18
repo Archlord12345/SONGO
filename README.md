@@ -26,7 +26,7 @@ L'application arbore une identité visuelle luxueuse s'inspirant des plateaux de
 Le jeu propose une ambiance musicale immersive avec des musiques de fond qui se lancent de façon aléatoire et en boucle à l'ouverture de l'application.
 
 ### 📂 Comment ajouter vos propres musiques ?
-1. Déposez simplement vos fichiers audio (au format `.mp3`, `.wav`, `.ogg`, etc.) dans le dossier racine : [songs/](file:///home/ravel/Documents/CODES/songo/songs/).
+1. Déposez simplement vos fichiers audio (au format `.mp3`, `.wav`, `.ogg`, `.webm`, etc.) dans le dossier racine : [songs/](file:///home/ravel/Documents/CODES/songo/songs/).
 2. Lancez la commande suivante dans votre terminal :
    ```bash
    npm run song
@@ -141,6 +141,14 @@ Pour s'intégrer de façon transparente avec le système d'exploitation Android,
 * **Configuration du Clavier et de l'Affichage** :
   * Fichier : [AndroidManifest.xml](file:///home/ravel/Documents/CODES/songo/android/app/src/main/AndroidManifest.xml)
   * Attributs : Utilise `android:windowSoftInputMode="adjustResize"` pour redimensionner automatiquement la fenêtre système lorsque le clavier virtuel apparaît, et force le support de l'orientation dynamique (`android:configChanges="orientation|screenSize"`).
+
+---
+
+## 📋 Prérequis de Développement
+
+Pour compiler et lancer l'application localement ou via la CI/CD, votre environnement doit respecter les versions suivantes :
+* **Node.js** : `>= 22.11.0` (L'application utilise des fonctionnalités modernes de Metro et des dépendances compatibles uniquement avec Node 22+).
+* **Java JDK** : `21` (Requis pour la compatibilité avec Gradle `9.3.1` et les outils de build modernes d'Android).
 
 ---
 
